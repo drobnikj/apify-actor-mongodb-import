@@ -1,0 +1,30 @@
+{
+  "name": "apify-act-mongodb-import",
+  "version": "1.0.0",
+  "description": "This act import array of object to specific MongoDB colection. Designes to use in Apify env.",
+  "main": "main.js",
+  "scripts": {
+    "test": "npm test",
+    "local": "APIFY_DEV_KEY_VALUE_STORE_DIR=./kvs-local/ node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drobnikj/apify-act-mongodb-import.git"
+  },
+  "keywords": [
+    "apify",
+    "act",
+    "mongodb",
+    "import"
+  ],
+  "author": "Jakub Drobnik <jakub.drobnik@apify.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/drobnikj/apify-act-mongodb-import/issues"
+  },
+  "homepage": "https://github.com/drobnikj/apify-act-mongodb-import#readme",
+  "dependencies": {
+    "apify": "^0.4.37",
+    "mongodb": "^2.2.33"
+  }
+}
