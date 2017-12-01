@@ -31,7 +31,7 @@ List of keys in Apify key-value store.
 - Imports list of plains objects:
 ```
 {
-  "mongoUrl": "mongodb://user:pwd@85.90.244.79:27017/db",
+  "mongoUrl": "mongodb://user:pwd@85.90.244.43:27017/db",
   "collection": "my-collection",
   "uniqueKeys": ["localUniqueKey"],
   "imports": {
@@ -50,7 +50,7 @@ List of keys in Apify key-value store.
 - Imports objects from Apify key-value store:
 ```
 {
-  "mongoUrl": "mongodb://user:pwd@85.90.244.79:27017/db",
+  "mongoUrl": "mongodb://user:pwd@85.90.244.43:27017/db",
   "collection": "my-collection",
   "imports": {
     "objectsFromKvs": {
