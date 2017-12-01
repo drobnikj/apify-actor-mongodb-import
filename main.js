@@ -1,7 +1,30 @@
 const Apify = require('apify');
 const MongoClient = require('mongodb').MongoClient;
+const _ = require('underscore');
 
 const sleepPromised = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+const importObjectToCollection = async (collection, object, importStats, uniqueKeys) => {
+    try {
+        if (uniqueKeys && Array.isArray(uniqueKeys)) {
+            const existingObject = await collection.findOne(_.pick(object, uniqueKeys));
+            if (existingObject) {
+                await collection.updateOne({ _id: existingObject._id }, object);
+                importStats.updated++;
+            } else {
+                await collection.insert(object);
+                importStats.imported++;
+            }
+        } else {
+            await collection.insert(object);
+            importStats.imported++;
+        }
+    } catch (err) {
+        importStats.failed++;
+        console.log(`Cannot import object ${JSON.stringify(object)}: ${err.message}`);
+    }
+    sleepPromised(100);
+};
 
 Apify.main(async () => {
     // Get input of your act
@@ -18,21 +41,17 @@ Apify.main(async () => {
     // Import
     const importStats = {
         imported: 0,
-        failed: 0
+        updated: 0,
+        failed: 0,
     };
+
+    const uniqueKeys = input.uniqueKeys;
 
     if (input.imports) {
         // Import objects from input.objectsToImport
         if (input.imports.plainObjects && Array.isArray(input.imports.plainObjects)) {
             for (const object of input.imports.plainObjects) {
-                try {
-                    await collection.insert(object);
-                    importStats.imported++;
-                } catch (err) {
-                    importStats.failed++;
-                    console.log(`Cannot import object ${JSON.stringify(object)}: ${err.message}`);
-                }
-                sleepPromised(100);
+                await importObjectToCollection(collection, object, importStats, uniqueKeys);
             }
         }
         // Import object from Apify kvs
@@ -45,14 +64,7 @@ Apify.main(async () => {
                     continue;
                 }
                 for (const object of objectsRecord.body) {
-                    try {
-                        await collection.insert(object);
-                        importStats.imported++;
-                    } catch (err) {
-                        importStats.failed++;
-                        console.log(`Cannot import object ${JSON.stringify(object)}: ${err.message}`);
-                    }
-                    sleepPromised(100);
+                    await importObjectToCollection(collection, object, importStats, uniqueKeys);
                 }
             }
         }
@@ -60,6 +72,6 @@ Apify.main(async () => {
         throw new Error('no objects to import!');
     }
 
-    console.log(`Import stats: imported: ${importStats.imported} failed: ${importStats.failed}`);
+    console.log(`Import stats: imported: ${importStats.imported} updated: ${importStats.updated} failed: ${importStats.failed}`);
     await Apify.setValue('OUTPUT', importStats);
 });
