@@ -1,11 +1,11 @@
 # apify-act-mongodb-import
-This act import array of object to specific MongoDB colection.
+This act imports array of object to specific MongoDB colection.
 
 ## Input
-You can specified import with attributes
+You can specified import with attributes:
 
 ### mongoUrl(String) - **required**
-Connection url to Mongo DB, see [https://docs.mongodb.com/manual/reference/connection-string/](Connection String URI Format).
+Connection url to MongoDB, see [https://docs.mongodb.com/manual/reference/connection-string/](Connection String URI Format).
 
 ### collection(String) - **required**
 Collection name, where act imports objects.
@@ -25,7 +25,7 @@ Defines object from Apify key-value store to import.
 Apify key-value store Id.
 
 ##### keys(Array)
-List of key in Apify key-value store.
+List of keys in Apify key-value store.
 
 ### Input examples
 - Imports list of plains objects:
