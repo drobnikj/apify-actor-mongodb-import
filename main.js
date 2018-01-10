@@ -4,8 +4,11 @@ const _ = require('underscore');
 
 const sleepPromised = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-const importObjectToCollection = async (collection, object, importStats, uniqueKeys) => {
+const importObjectToCollection = async (collection, object, importStats, uniqueKeys, timestampAttr) => {
     try {
+        if (timestampAttr) {
+            object[timestampAttr] = new Date();
+        }
         if (uniqueKeys && Array.isArray(uniqueKeys)) {
             const existingObject = await collection.findOne(_.pick(object, uniqueKeys));
             if (existingObject) {
@@ -46,12 +49,13 @@ Apify.main(async () => {
     };
 
     const uniqueKeys = input.uniqueKeys;
+    const timestampAttr = input.timestampAttr;
 
     if (input.imports) {
         // Import objects from input.objectsToImport
         if (input.imports.plainObjects && Array.isArray(input.imports.plainObjects)) {
             for (const object of input.imports.plainObjects) {
-                await importObjectToCollection(collection, object, importStats, uniqueKeys);
+                await importObjectToCollection(collection, object, importStats, uniqueKeys, timestampAttr);
             }
         }
         // Import object from Apify kvs
@@ -64,7 +68,7 @@ Apify.main(async () => {
                     continue;
                 }
                 for (const object of objectsRecord.body) {
-                    await importObjectToCollection(collection, object, importStats, uniqueKeys);
+                    await importObjectToCollection(collection, object, importStats, uniqueKeys, timestampAttr);
                 }
             }
         }
