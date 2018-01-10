@@ -10,6 +10,9 @@ Connection url to MongoDB, see [https://docs.mongodb.com/manual/reference/connec
 ### collection(String) - **required**
 Collection name, where act imports objects.
 
+### timestampAttr(String)
+When this attribute is set to a String, the act will add a timestamp attribute to each record under the specified name.
+
 ### uniqueKeys(Array)
 Unique keys for object, if you specified unique keys, act try to find object with this attributes in DB and update it.
 
@@ -33,6 +36,7 @@ List of keys in Apify key-value store.
 {
   "mongoUrl": "mongodb://user:pwd@85.90.244.43:27017/db",
   "collection": "my-collection",
+  "timestampAttr": "created_at",
   "uniqueKeys": ["localUniqueKey"],
   "imports": {
     "plainObjects": [
