@@ -29,6 +29,13 @@ const importObjectToCollection = async (collection, object, importStats, uniqueK
     sleepPromised(100);
 };
 
+const includeTransformFunction(fnText){
+    eval(fnText);
+    if(!transform || !(typeof transform != "function")){
+        throw new Error('Transform function is not correctly defined! Please consult readme.');
+    }
+}
+
 Apify.main(async () => {
     // Get input of your act
     const input = await Apify.getValue('INPUT');
@@ -50,12 +57,22 @@ Apify.main(async () => {
 
     const uniqueKeys = input.uniqueKeys;
     const timestampAttr = input.timestampAttr;
+    
+    if (input.transformFunction) {
+        eval(input.transformFunction);
+        if (!transform || (typeof transform != "function")) {
+            throw new Error('Transform function is not correctly defined! Please consult readme.');
+        }
+    }
 
+    const processObject = transform || object => object;
+    
     if (input.imports) {
         // Import objects from input.objectsToImport
         if (input.imports.plainObjects && Array.isArray(input.imports.plainObjects)) {
             for (const object of input.imports.plainObjects) {
-                await importObjectToCollection(collection, object, importStats, uniqueKeys, timestampAttr);
+                const newObject = await processObject(object);
+                await importObjectToCollection(collection, newObject, importStats, uniqueKeys, timestampAttr);
             }
         }
         // Import object from Apify kvs
@@ -68,7 +85,8 @@ Apify.main(async () => {
                     continue;
                 }
                 for (const object of objectsRecord.body) {
-                    await importObjectToCollection(collection, object, importStats, uniqueKeys, timestampAttr);
+                    const newObject = await processObject(object);
+                    await importObjectToCollection(collection, newObject, importStats, uniqueKeys, timestampAttr);
                 }
             }
         }
