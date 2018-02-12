@@ -29,13 +29,6 @@ const importObjectToCollection = async (collection, object, importStats, uniqueK
     sleepPromised(100);
 };
 
-const includeTransformFunction(fnText){
-    eval(fnText);
-    if(!transform || !(typeof transform != "function")){
-        throw new Error('Transform function is not correctly defined! Please consult readme.');
-    }
-}
-
 Apify.main(async () => {
     // Get input of your act
     const input = await Apify.getValue('INPUT');
