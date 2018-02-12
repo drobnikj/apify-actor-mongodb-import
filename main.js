@@ -53,12 +53,12 @@ Apify.main(async () => {
     
     if (input.transformFunction) {
         eval(input.transformFunction);
-        if (!transform || (typeof transform != "function")) {
+        if (typeof transform != 'function') {
             throw new Error('Transform function is not correctly defined! Please consult readme.');
         }
     }
 
-    const processObject = transform || object => object;
+    const processObject = (typeof transform === 'function') ? transform : (object => object);
     
     if (input.imports) {
         // Import objects from input.objectsToImport
