@@ -65,7 +65,9 @@ Apify.main(async () => {
         if (input.imports.plainObjects && Array.isArray(input.imports.plainObjects)) {
             for (const object of input.imports.plainObjects) {
                 const newObject = await processObject(object);
-                await importObjectToCollection(collection, newObject, importStats, uniqueKeys, timestampAttr);
+                if (newObject !== undefined) {
+                    await importObjectToCollection(collection, newObject, importStats, uniqueKeys, timestampAttr);
+                }
             }
         }
         // Import object from Apify kvs
@@ -79,7 +81,9 @@ Apify.main(async () => {
                 }
                 for (const object of objectsRecord.body) {
                     const newObject = await processObject(object);
-                    await importObjectToCollection(collection, newObject, importStats, uniqueKeys, timestampAttr);
+                    if (newObject !== undefined) {
+                        await importObjectToCollection(collection, newObject, importStats, uniqueKeys, timestampAttr);
+                    }
                 }
             }
         }
