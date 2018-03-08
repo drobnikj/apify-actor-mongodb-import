@@ -17,7 +17,7 @@ When this attribute is set to a String, the act will add a timestamp attribute t
 Unique keys for object, if you specified unique keys, act try to find object with this attributes in DB and update it.
 
 ### transformFunction(String)
-Text representation of a JavaScript function for transforming an object before importing it to the database. The function must be named __transform__, accept one parameter and return the transformed object (can be the same object). The function may be async or return a promise. Note: If using double quotes, they need to be escaped. Example:
+Text representation of a JavaScript function for transforming an object before importing it to the database. The function must be named __transform__, accept one parameter and return the transformed object (can be the same object). If the function returns __undefined__, the object will not be imported. The function may be async or return a promise. Note: If using double quotes, they need to be escaped. Example:
 ```
 function transform(object){
     object.newAttribute = 'some_value';
