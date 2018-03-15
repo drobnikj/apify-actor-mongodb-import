@@ -24,8 +24,8 @@
   },
   "homepage": "https://github.com/drobnikj/apify-act-mongodb-import#readme",
   "dependencies": {
-    "apify": "^0.4.37",
-    "mongodb": "^2.2.33",
+    "apify": "^0.5.12",
+    "mongodb": "^2.2.35",
     "underscore": "^1.8.3"
   }
 }
