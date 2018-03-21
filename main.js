@@ -38,6 +38,8 @@ Apify.main(async () => {
 
     const collectionName = input.collection || 'results';
 
+    console.log('Import to collection:', collectionName);
+
     const db = await MongoClient.connect(mongoUrl);
     const collection = await db.collection(collectionName);
 
@@ -50,7 +52,7 @@ Apify.main(async () => {
 
     const uniqueKeys = input.uniqueKeys;
     const timestampAttr = input.timestampAttr;
-    
+
     if (input.transformFunction) {
         eval(input.transformFunction);
         if (typeof transform != 'function') {
@@ -59,8 +61,9 @@ Apify.main(async () => {
     }
 
     const processObject = (typeof transform === 'function') ? transform : (object => object);
-    
+
     if (input.imports) {
+        if (!input.imports.plainObjects && input.imports.objectsFromKvs) throw new Error('No objects to import! You have to specified imports.plainObjects or imports.objectsFromKvs.');
         // Import objects from input.objectsToImport
         if (input.imports.plainObjects && Array.isArray(input.imports.plainObjects)) {
             for (const object of input.imports.plainObjects) {
@@ -88,7 +91,7 @@ Apify.main(async () => {
             }
         }
     } else {
-        throw new Error('no objects to import!');
+        throw new Error('No objects to import! You have to specified imports.');
     }
 
     console.log(`Import stats: imported: ${importStats.imported} updated: ${importStats.updated} failed: ${importStats.failed}`);
