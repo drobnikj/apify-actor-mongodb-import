@@ -37,6 +37,9 @@ Apify.main(async () => {
     if (!mongoUrl) throw new Error('mongoUrl is missing!');
 
     const collectionName = input.collection || 'results';
+    
+    console.log('Mongo URL:',mongoUrl)
+    console.log('Collection:',collectionName)
 
     const db = await MongoClient.connect(mongoUrl);
     const collection = await db.collection(collectionName);
