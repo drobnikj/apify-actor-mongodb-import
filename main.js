@@ -1,5 +1,6 @@
 const Apify = require('apify');
 const MongoClient = require('mongodb').MongoClient;
+const { createTunnel, closeTunnel } = require('proxy-chain');
 const _ = require('underscore');
 
 const sleepPromised = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -32,9 +33,21 @@ const importObjectToCollection = async (collection, object, importStats, uniqueK
 Apify.main(async () => {
     // Get input of your act
     const input = await Apify.getValue('INPUT');
+    console.log(input);
 
-    const mongoUrl = process.env.MONGO_URL || input.mongoUrl;
+    let mongoUrl = process.env.MONGO_URL || input.mongoUrl;
     if (!mongoUrl) throw new Error('mongoUrl is missing!');
+
+    let tunnel = null;
+    if (input.proxyUrl) {
+        const match = mongoUrl.match(/mongodb:\/\/(.*)@([^/]*)\/?(.*)/);
+        if (match) {
+            const [wholeString, credentials, host, additionalDetails] = match;
+            const hosts = host.split(',');
+            tunnel = await createTunnel(input.proxyUrl, hosts[0]);
+            mongoUrl = `mongodb://${credentials}@${tunnel}${additionalDetails ? `/${additionalDetails}` : '' }`;
+        }
+    }
 
     const collectionName = input.collection || 'results';
 
@@ -96,4 +109,7 @@ Apify.main(async () => {
 
     console.log(`Import stats: imported: ${importStats.imported} updated: ${importStats.updated} failed: ${importStats.failed}`);
     await Apify.setValue('OUTPUT', importStats);
+    if (tunnel) {
+      await closeTunnel(tunnel);
+    }
 });
