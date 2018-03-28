@@ -44,7 +44,7 @@ Apify.main(async () => {
         if (match) {
             const [wholeString, credentials, host, additionalDetails] = match;
             const hosts = host.split(',');
-            const tunnels = await Promise.map(hosts, (host) => createTunnel(input.proxyUrl, host))
+            const tunnels = await Promise.map(hosts, (host) => createTunnel(input.proxyUrl, host));
             mongoUrl = `mongodb://${credentials}@${tunnels.join(',')}${additionalDetails ? `/${additionalDetails}` : '' }`;
         }
     }
