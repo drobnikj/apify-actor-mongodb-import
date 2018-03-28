@@ -10,6 +10,10 @@ Connection url to MongoDB, see [https://docs.mongodb.com/manual/reference/connec
 ### collection(String) - **required**
 Collection name, where act imports objects.
 
+### proxyUrl(String)
+Proxy url string. Only HTTP proxy can be used and it needs to allow "HTTP CONNECT" from non SSL ports. When this attribute
+is provided, connection to mongo database will be proxied through the provided proxy.
+
 ### timestampAttr(String)
 When this attribute is set to a String, the act will add a timestamp attribute to each record under the specified name.
 
