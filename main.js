@@ -1,6 +1,9 @@
 const Apify = require('apify');
 const Promise = require('bluebird');
 const fs = require('fs');
+// const dns = require('dns');
+const ping = require('ping');
+const hostile = require('hostile');
 const MongoClient = require('mongodb').MongoClient;
 const { createTunnel, closeTunnel } = require('proxy-chain');
 const _ = require('underscore');
@@ -56,9 +59,18 @@ Apify.main(async () => {
 
             if (!process.env.KEEP_HOSTS) {
                 const hostString = `127.0.0.1   ${pureHostnames.join(' ')}`;
-                console.log('writing to host file: ', hostString);
-                fs.writeFileSync('/etc/hosts', hostString, { encoding: 'utf8', flag: 'a'});
-                console.log(fs.readFileSync('/etc/hosts', { encoding: 'utf8' }));
+                await new Promise((resolve, reject) => {
+                    hostile.set('127.0.0.1', pureHostnames.join(' '), (err) => {
+                        if (err) return reject(err);
+                        return resolve();
+                    })
+                });
+                // Test connectivity to proxy
+                await Promise.all(pureHostnames.map(async (hostname) => {
+                    const data = await ping.promise.probe(hostname);
+                    console.log('Connecting to ip', data.numeric_host);
+                    console.log('Host is alive', data.alive);
+                }));
             }
 
             const transformedTunnels = tunnels.map((tunnel, i) => tunnel.replace('localhost', pureHostnames[i])).join(',');
