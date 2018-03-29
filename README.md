@@ -5,7 +5,7 @@ This act imports array of object to specific MongoDB colection.
 You can specified import with attributes:
 
 ### mongoUrl(String) - **required**
-Connection url to MongoDB, see [https://docs.mongodb.com/manual/reference/connection-string/](Connection String URI Format).
+Connection url to MongoDB, see [Connection String URI Format](https://docs.mongodb.com/manual/reference/connection-string/).
 
 ### collection(String) - **required**
 Collection name, where act imports objects.
