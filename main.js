@@ -55,16 +55,18 @@ Apify.main(async () => {
                 if (port == 2) return host;
                 else return `${host}:27017`; // default mongodb port is 27017 and is omited from basic 3.6 string
             });
+
             const tunnels = await Promise.map(hosts, (host) => createTunnel(input.proxyUrl, host))
 
             if (!process.env.KEEP_HOSTS) {
-                const hostString = `127.0.0.1   ${pureHostnames.join(' ')}`;
+                // add item to /etc/hosts
                 await new Promise((resolve, reject) => {
                     hostile.set('127.0.0.1', pureHostnames.join(' '), (err) => {
                         if (err) return reject(err);
                         return resolve();
                     })
                 });
+
                 // Test connectivity to proxy
                 await Promise.all(pureHostnames.map(async (hostname) => {
                     const data = await ping.promise.probe(hostname);
@@ -75,7 +77,6 @@ Apify.main(async () => {
 
             const transformedTunnels = tunnels.map((tunnel, i) => tunnel.replace('localhost', pureHostnames[i])).join(',');
             mongoUrl = `${protocol}://${credentials}@${transformedTunnels}${additionalDetails ? `/${additionalDetails}` : '' }`;
-            console.log(mongoUrl);
         }
     }
 
