@@ -1,5 +1,6 @@
 const Apify = require('apify');
 const Promise = require('bluebird');
+const fs = require('fs');
 const MongoClient = require('mongodb').MongoClient;
 const { createTunnel, closeTunnel } = require('proxy-chain');
 const _ = require('underscore');
@@ -40,12 +41,29 @@ Apify.main(async () => {
 
     let tunnels = null;
     if (input.proxyUrl) {
-        const match = mongoUrl.match(/mongodb:\/\/(.*)@([^/]*)\/?(.*)/);
+        let match = mongoUrl.match(/(mongodb):\/\/(.*)@([^/]*)\/?(.*)/); // v3.4 mongo string
+        if (!match) match = mongoUrl.match(/(mongodb\+srv):\/\/(.*)@([^/]*)\/?(.*)/); // v3.6 mongo string
         if (match) {
-            const [wholeString, credentials, host, additionalDetails] = match;
-            const hosts = host.split(',');
+            const [wholeString, protocol, credentials, host, additionalDetails] = match;
+            const pureHostnames = [];
+            const hosts = host.split(',').map(host => {
+                const [hostname, port] = host.split(':');
+                pureHostnames.push(hostname);
+                if (port == 2) return host;
+                else return `${host}:27017`; // default mongodb port is 27017 and is omited from basic 3.6 string
+            });
             const tunnels = await Promise.map(hosts, (host) => createTunnel(input.proxyUrl, host))
-            mongoUrl = `mongodb://${credentials}@${tunnels.join(',')}${additionalDetails ? `/${additionalDetails}` : '' }`;
+
+            if (!process.env.KEEP_HOSTS) {
+                const hostString = `127.0.0.1   ${pureHostnames.join(' ')}`;
+                console.log('writing to host file: ', hostString);
+                fs.writeFileSync('/etc/hosts', hostString, { encoding: 'utf8', flag: 'a'});
+                console.log(fs.readFileSync('/etc/hosts', { encoding: 'utf8' }));
+            }
+
+            const transformedTunnels = tunnels.map((tunnel, i) => tunnel.replace('localhost', pureHostnames[i])).join(',');
+            mongoUrl = `${protocol}://${credentials}@${transformedTunnels}${additionalDetails ? `/${additionalDetails}` : '' }`;
+            console.log(mongoUrl);
         }
     }
 
@@ -54,6 +72,7 @@ Apify.main(async () => {
     console.log('Import to collection:', collectionName);
 
     const db = await MongoClient.connect(mongoUrl);
+
     const collection = await db.collection(collectionName);
 
     // Import
