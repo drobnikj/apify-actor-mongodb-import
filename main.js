@@ -108,7 +108,7 @@ Apify.main(async () => {
     const processObject = (typeof transform === 'function') ? transform : (object => object);
 
     if (input.imports) {
-        if (!input.imports.plainObjects && input.imports.objectsFromKvs) throw new Error('No objects to import! You have to specified imports.plainObjects or imports.objectsFromKvs.');
+        if (!input.imports.plainObjects && !input.imports.objectsFromKvs) throw new Error('No objects to import! You have to specified imports.plainObjects or imports.objectsFromKvs.');
         // Import objects from input.objectsToImport
         if (input.imports.plainObjects && Array.isArray(input.imports.plainObjects)) {
             for (const object of input.imports.plainObjects) {
