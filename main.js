@@ -128,7 +128,7 @@ Apify.main(async () => {
                     continue;
                 }
                 // Array path
-                if(Array.isArray(objectsRecord.body)){
+                if (Array.isArray(objectsRecord.body)) {
                     for (const object of objectsRecord.body) {
                         const newObject = await processObject(object);
                         if (newObject !== undefined) {
@@ -137,7 +137,7 @@ Apify.main(async () => {
                     }
                 }
                 // Object path
-                else{
+                else {
                     const newObject = await processObject(objectsRecord.body);
                     if (newObject !== undefined) {
                         await importObjectToCollection(collection, newObject, importStats, uniqueKeys, timestampAttr);
