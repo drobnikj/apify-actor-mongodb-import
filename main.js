@@ -123,12 +123,22 @@ Apify.main(async () => {
             const storeId = input.imports.objectsFromKvs.storeId;
             for (const key of input.imports.objectsFromKvs.keys) {
                 const objectsRecord = await Apify.client.keyValueStores.getRecord({ storeId, key });
-                if (!objectsRecord || !objectsRecord.body || !Array.isArray(objectsRecord.body)) {
+                if (!objectsRecord || !objectsRecord.body || typeof objectsRecord.body !== 'object') {
                     console.log(`Cannot import object from store: ${JSON.stringify({ storeId, key })}`);
                     continue;
                 }
-                for (const object of objectsRecord.body) {
-                    const newObject = await processObject(object);
+                // Array path
+                if(Array.isArray(objectsRecord.body)){
+                    for (const object of objectsRecord.body) {
+                        const newObject = await processObject(object);
+                        if (newObject !== undefined) {
+                            await importObjectToCollection(collection, newObject, importStats, uniqueKeys, timestampAttr);
+                        }
+                    }
+                }
+                // Object path
+                else{
+                    const newObject = await processObject(objectsRecord.body);
                     if (newObject !== undefined) {
                         await importObjectToCollection(collection, newObject, importStats, uniqueKeys, timestampAttr);
                     }
