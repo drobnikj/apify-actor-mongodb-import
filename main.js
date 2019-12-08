@@ -108,7 +108,7 @@ Apify.main(async () => {
     const processObject = (typeof transform === 'function') ? transform : (object => object);
 
     if (input.imports) {
-        if (!input.imports.plainObjects && !input.imports.objectsFromKvs) throw new Error('No objects to import! You have to specified imports.plainObjects or imports.objectsFromKvs.');
+        if (!input.imports.plainObjects && !input.imports.objectsFromKvs && !input.imports.objectsFromDataset) throw new Error('No objects to import! You have to specified imports.plainObjects or imports.objectsFromKvs.');
         // Import objects from input.objectsToImport
         if (input.imports.plainObjects && Array.isArray(input.imports.plainObjects)) {
             for (const object of input.imports.plainObjects) {
@@ -145,6 +145,19 @@ Apify.main(async () => {
                 }
             }
         }
+
+        if(input.imports.objectsFromDataset && input.imports.objectsFromDataset.datasetId || input.defaultDatasetId){
+            const datasetId = input.defaultDatasetId || input.imports.objectsFromDataset.datasetId;
+            const dataset = await Apify.openDataset(datasetId);
+            await dataset.forEach(async item=> {
+                const newObject = await processObject(item);
+                if (newObject !== undefined) {
+                    await importObjectToCollection(collection, newObject, importStats, uniqueKeys, timestampAttr);
+                }
+            }, {limit: 100000}) //TODO: CONFIGURABLE
+
+        }
+
     } else {
         throw new Error('No objects to import! You have to specified imports.');
     }
