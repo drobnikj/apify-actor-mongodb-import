@@ -154,7 +154,7 @@ Apify.main(async () => {
                 if (newObject !== undefined) {
                     await importObjectToCollection(collection, newObject, importStats, uniqueKeys, timestampAttr);
                 }
-            }, {limit: 10000}) //TODO: CONFIGURABLE
+            }, {limit: 100000}) //TODO: CONFIGURABLE
 
         }
 
