@@ -5,9 +5,7 @@ export interface Types {
     collection?: string;
     uniqueKeys?: string[];
     datasetId?: string;
-    transformFunction?: string; // TBD
-    plainObjects?: object[]; // TBD
-    objectsFromKvs?: unknown; // TBD
+    proxyUrl?: string; // TBD
 }
 
 export interface ImportStats {
