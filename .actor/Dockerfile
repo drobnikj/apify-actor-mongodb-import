@@ -5,8 +5,8 @@ FROM oven/bun:1.0
 # in the base image.
 COPY . ./
 
-# Install all dependencies. 
-RUN bun install
+# Install all dependencies.
+RUN bun install --production
 
 # Run the image.
 CMD bun run start
