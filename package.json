@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "apify": "latest",
-    "lodash": "latest",
     "mongodb": "latest"
   },
   "devDependencies": {
