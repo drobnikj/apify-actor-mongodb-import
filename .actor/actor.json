@@ -1,0 +1,9 @@
+{
+	"actorSpecification": 1,
+	"name": "mongo-import",
+	"title": "MongoDB Import",
+	"description": "Import items from dataset into MongoDB",
+	"version": "1.0",
+	"input": "./input_schema.json",
+	"dockerfile": "./Dockerfile"
+}

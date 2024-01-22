@@ -1,0 +1,6 @@
+{
+  "extends": "@apify/eslint-config-ts",
+  "rules": {
+    "@typescript-eslint/ban-ts-comment": "warn"
+  }
+}
