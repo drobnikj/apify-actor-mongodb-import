@@ -46,6 +46,7 @@ export async function importFromDataset(datasetId: string, importOptions: Import
     while (true) {
         const data = await dataset.getData({ offset: importOptions.importStats.offset, limit });
         if (data.items.length === 0) break;
+        // TODO: Use bulk mongo db operation instead of this
         for (const object of data.items) {
             await importObjectToCollection(object, importOptions);
         }

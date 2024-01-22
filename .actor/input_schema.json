@@ -20,7 +20,9 @@
             "title": "Collection",
             "type": "string",
             "description": "Name of the collection to store the scraped data.",
-            "editor": "textfield"
+            "editor": "textfield",
+            "default": "results",
+            "prefill": "results"
         },
         "uniqueKeys": {
             "title": "Unique attributes to identify a document",
@@ -29,5 +31,5 @@
             "editor": "json"
         }
     },
-    "required": ["mongoUrl", "datasetId"]
+    "required": ["mongoUrl", "datasetId", "collection"]
 }

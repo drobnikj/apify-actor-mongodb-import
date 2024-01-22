@@ -2,7 +2,7 @@ import { Collection } from 'mongodb';
 
 export interface Types {
     mongoUrl?: string;
-    collection?: string;
+    collection: string;
     uniqueKeys?: string[];
     datasetId?: string;
     proxyUrl?: string; // TBD

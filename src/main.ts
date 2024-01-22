@@ -4,8 +4,6 @@ import { MongoClient } from 'mongodb';
 import { ImportStats, Types } from './types';
 import { importFromDataset } from './utils';
 
-const DEFAULT_COLLECTION_NAME = 'results';
-
 await Actor.init();
 
 // Get input
@@ -15,7 +13,7 @@ if (!input) throw new Error('Input is missing!');
 const mongoUrl = process.env.MONGO_URL || input.mongoUrl;
 if (!mongoUrl) throw new Error('mongoUrl is missing!');
 
-const collectionName = input.collection ?? DEFAULT_COLLECTION_NAME;
+const collectionName = input.collection;
 
 log.info('Import to collection', { collectionName });
 
