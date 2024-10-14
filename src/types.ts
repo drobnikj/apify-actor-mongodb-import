@@ -17,6 +17,5 @@ export interface ImportStats {
 
 export interface ImportOptions {
     collection: Collection;
-    importStats: ImportStats;
     uniqueKeys?: string[];
 }

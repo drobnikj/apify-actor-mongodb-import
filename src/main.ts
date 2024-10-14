@@ -28,7 +28,7 @@ try {
 }
 const collection = client.db().collection(collectionName);
 
-const importStats = await Actor.useState('import-stats', {
+const importStatsState = await Actor.useState('import-stats', {
     imported: 0,
     updated: 0,
     failed: 0,
@@ -38,15 +38,15 @@ const importStats = await Actor.useState('import-stats', {
 const { uniqueKeys } = input;
 
 if (input.datasetId) {
-    await importFromDataset(input.datasetId, { collection, importStats, uniqueKeys });
+    await importFromDataset(input.datasetId, { collection, uniqueKeys }, importStatsState);
 } else {
     await Actor.fail('You have to specified what to import by datesetId.');
     throw new Error('You have to specified what to import by datesetId.');
 }
 
-log.info(`Import stats: imported: ${importStats.imported} updated: ${importStats.updated} failed: ${importStats.failed}`);
+log.info(`Import stats: imported: ${importStatsState.imported} updated: ${importStatsState.updated} failed: ${importStatsState.failed}`);
 
-await Actor.setValue('OUTPUT', importStats);
+await Actor.setValue('OUTPUT', importStatsState);
 
 await client.close();
 await Actor.exit();
