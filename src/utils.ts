@@ -44,10 +44,11 @@ export async function importFromDataset(datasetId: string, importOptions: Import
 
         try {
             const result = await importOptions.collection.bulkWrite(bulkOperations);
-            console.log('result', result);
-            importStatsState.imported += result.insertedCount || result.upsertedCount;
-            importStatsState.updated += result.modifiedCount;
-            log.info('Imported batch data', { imported: importStatsState.imported, updated: importStatsState.updated });
+            const imported = result.insertedCount || result.upsertedCount;
+            const updated = result.modifiedCount;
+            importStatsState.imported += imported;
+            importStatsState.updated += updated;
+            log.info('Imported batch data', { imported, updated, batch: data.items.length });
         } catch (err) {
             importStatsState.failed += data.items.length;
             // @ts-ignore
