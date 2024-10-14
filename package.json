@@ -1,36 +1,34 @@
 {
-	"name": "apify-act-mongodb-import",
-	"version": "1.0.0",
-	"description": "This act import array of object to specific MongoDB colection. Designes to use in Apify env.",
-	"main": "main.js",
-	"scripts": {
-		"test": "npm test",
-		"local": "APIFY_DEV_KEY_VALUE_STORE_DIR=./kvs-local/ node main.js",
-		"run-local": "KEEP_HOSTS=1 APIFY_LOCAL_EMULATION_DIR=./apify_local APIFY_DEFAULT_KEY_VALUE_STORE_ID=default APIFY_DEFAULT_DATASET_ID=default node main.js"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/drobnikj/apify-act-mongodb-import.git"
-	},
-	"keywords": [
-		"apify",
-		"act",
-		"mongodb",
-		"import"
-	],
-	"author": "Jakub Drobnik <jakub.drobnik@apify.com>",
-	"license": "ISC",
-	"bugs": {
-		"url": "https://github.com/drobnikj/apify-act-mongodb-import/issues"
-	},
-	"homepage": "https://github.com/drobnikj/apify-act-mongodb-import#readme",
-	"dependencies": {
-		"apify": "^0.5.12",
-		"bluebird": "^3.5.1",
-		"hostile": "^1.3.1",
-		"mongodb": "^2.2.35",
-		"ping": "^0.2.2",
-		"proxy-chain": "^0.1.28",
-		"underscore": "^1.8.3"
-	}
+  "name": "mongo-import",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Import items from dataset into MongoDB",
+  "engines": {
+    "bun": ">=1.0.0"
+  },
+  "dependencies": {
+    "apify": "latest",
+    "mongodb": "latest"
+  },
+  "devDependencies": {
+    "@apify/eslint-config-ts": "^0.4.1",
+    "@apify/tsconfig": "^0.1.0",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "bun-types": "latest",
+    "eslint": "^8.57.1",
+    "typescript": "^5.6.3"
+  },
+  "scripts": {
+    "start": "bun src/main.ts",
+    "test": "echo \"Error: oops, the actor has no tests yet, sad!\" && exit 1",
+    "lint": "eslint ./src --ext .ts",
+    "lint:fix": "eslint ./src --ext .ts --fix"
+  },
+  "author": "It's not you it's me",
+  "license": "ISC",
+  "module": "index.ts",
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
 }

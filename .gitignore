@@ -61,4 +61,8 @@ typings/
 
 kvs-local/*
 
-apify_local
+storage
+
+# Added by Apify CLI
+node_modules
+.venv
