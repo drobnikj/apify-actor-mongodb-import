@@ -1,12 +1,12 @@
 {
-    "title": "Scrape data from a web page",
+    "title": "MongoDB Import",
     "type": "object",
     "schemaVersion": 1,
     "properties": {
         "mongoUrl": {
-            "title": "Mongo URL",
+            "title": "Mongo connection URL",
             "type": "string",
-            "description": "Connection url to MongoDB, see [Connection String URI Format](https://docs.mongodb.com/manual/reference/connection-string/).",
+            "description": "Connection URL to MongoDB, see [Connection String URI Format](https://docs.mongodb.com/manual/reference/connection-string/).",
             "editor": "textfield",
             "isSecret": true
         },
