@@ -1,33 +1,33 @@
 {
-    "title": "MongoDB Import",
+    "title": "MongoDB Data Import",
     "type": "object",
     "schemaVersion": 1,
     "properties": {
-        "mongoUrl": {
-            "title": "Mongo connection URL",
-            "type": "string",
-            "description": "Connection URL to MongoDB, see [Connection String URI Format](https://docs.mongodb.com/manual/reference/connection-string/).",
-            "editor": "textfield",
-            "isSecret": true
-        },
         "datasetId": {
             "title": "Dataset ID",
             "type": "string",
-            "description": "Dataset ID from which data will be imported.",
+            "description": "The ID of the Apify dataset from which data will be imported.",
             "editor": "textfield"
         },
-        "collection": {
-            "title": "Collection",
+        "mongoUrl": {
+            "title": "MongoDB Connection URL",
             "type": "string",
-            "description": "Name of the collection to store the scraped data.",
+            "description": "The connection string to your MongoDB instance. Refer to the [MongoDB URI format](https://docs.mongodb.com/manual/reference/connection-string/) for details.",
+            "editor": "textfield",
+            "isSecret": true
+        },
+        "collection": {
+            "title": "MongoDB Collection Name",
+            "type": "string",
+            "description": "The name of the MongoDB collection where the data will be stored.",
             "editor": "textfield",
             "default": "results",
             "prefill": "results"
         },
         "uniqueKeys": {
-            "title": "Unique attributes to identify a document",
+            "title": "Unique Document Keys",
             "type": "array",
-            "description": "Unique keys for object, if you specified unique keys, act try to find object with this attributes in DB and update it.",
+            "description": "An array of field names to uniquely identify documents in the collection. If provided, documents with matching fields will be updated instead of inserted.",
             "editor": "json"
         }
     },

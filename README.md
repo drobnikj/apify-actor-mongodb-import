@@ -1,17 +1,17 @@
-# MongoDB Import
-Actor imports items from dataset to specific Mongodb collection.
+# MongoDB Import Actor
 
-## Input
-You can specified import with attributes:
+This Actor imports data from an Apify dataset into a specified MongoDB collection. It allows you to take scraped or processed data stored in a dataset and transfer it directly into your MongoDB database. The Actor also supports the identification of unique keys to either update existing documents or insert new ones.
 
-### mongoUrl(String) - **required**
-Connection url to MongoDB, see [Connection String URI Format](https://docs.mongodb.com/manual/reference/connection-string/).
+## Features
 
-### collection(String) - **required**
-Collection name, where act imports objects.
+- Imports data from an Apify dataset into a MongoDB collection.
+- Supports identification of unique keys to update existing documents if found.
+- Allows flexible MongoDB connection through the provided MongoDB URI.
+- Automatically handles connection and insertion into MongoDB.
+- Customize the collection name and dataset source.
 
-### datasetId(String)
-Apify dataset Id, from which act imports objects.
+## How It Works
 
-### uniqueKeys(Array)
-Unique keys for object, if you specified unique keys, act try to find object with this attributes in DB and update it.
+1. **Dataset Input**: The Actor fetches data from the Apify dataset specified by the `datasetId` parameter.
+2. **MongoDB Connection**: Using the provided MongoDB connection string, the Actor connects to the specified MongoDB database.
+3. **Data Import**: The Actor imports the data into the collection specified by the `collection` parameter. If unique keys are provided, it will try to update existing documents with matching unique keys, otherwise it will insert new records.
